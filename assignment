@@ -1,16 +1,23 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
-##1)IMPORT DATA SET 
+
+
+
+&nbsp;
+
+#####1)IMPORT DATA SET 
 
 ```{r p1}
 library(readr)
 activity = as.data.frame(read_csv("C:/Users/Daiane/Desktop/COURSERA/REPRODUCIBLE RESEARCH/SEMANA2/activity.csv"
 ,col_types = cols(date = col_date(format = "%Y-%m-%d"))))
-
 ```
 &nbsp;
 
 
-##Show data set 
+#####Show data set 
 
 ```{r p2}
 head(activity)
@@ -20,7 +27,7 @@ head(activity)
 &nbsp;
 
 
-##Make a new data set whith a new variable that sum all steps, for each day
+#####Make a new data set whith a new variable that sum all steps, for each day
 
 ```{r p3 ,message=FALSE}
 library(dplyr)
@@ -33,7 +40,7 @@ library(dplyr)
 
 &nbsp;
 
-##2)Histogram of the total number of steps taken each day 
+#####2)Histogram of the total number of steps taken each day 
 
 ```{r g1, message=FALSE}
 library(ggplot2)
@@ -42,7 +49,7 @@ qplot(st$st_soma,geom = 'histogram',main = "Histogram for Steps", ylab = "steps"
 &nbsp;
 
 
-##3)Mean and median number of steps taken each day
+#####3)Mean and median number of steps taken each day
 
 ```{r p4 ,message=FALSE}
 mean(st$st_soma)
@@ -51,7 +58,7 @@ median(st$st_soma)
 &nbsp;
 
 
-##4)Time series plot of the average number of steps taken
+#####4)Time series plot of the average number of steps taken
 
 *  Calculation of the mean, for each day
 ```{r p5 ,message=FALSE}
@@ -73,7 +80,7 @@ qplot(x=st2$date,
 &nbsp;
 
 
-##5)The 5-minute interval that, on average, contains the maximum number of steps
+#####5)The 5-minute interval that, on average, contains the maximum number of steps
 
 
 *  Calculation of the mean, for each interval
@@ -93,13 +100,12 @@ interval[which.max(interval$st_media),]
 &nbsp;
 
 
-##6)Code to describe and show a strategy for imputing missing data
+#####6)Code to describe and show a strategy for imputing missing data
 *  Replacee the missing values
 
 ```{r p8 ,message=FALSE}
 data_subs = activity
 na = is.na(data_subs$steps)
-
 avg = tapply(data_subs$steps, data_subs$interval, mean, na.rm=TRUE, simplify=TRUE)
 data_subs$steps[na] = avg[as.character(data_subs$interval[na])]
 ```
@@ -116,7 +122,7 @@ steps_subs <- data_subs %>%
 
 &nbsp;
 
-##7)Histogram of the total number of steps taken each day after missing values are imputed 
+#####7)Histogram of the total number of steps taken each day after missing values are imputed 
 
 ```{r g3, message=FALSE}
 qplot(steps_subs$steps,geom = 'histogram',main = "Histogram for Steps", ylab = "steps after replace missing values")
@@ -133,15 +139,14 @@ median(steps_subs$steps)
 
 &nbsp;
 
-##8)Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
+#####8)Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
 
 &nbsp;
 
 *  Difference between weekday weekend
 
 ```{r p11 ,message=FALSE}
-data_subs2 = mutate(data_subs, weektype = ifelse(weekdays(data_subs$date) == "s�bado" | weekdays(data_subs$date) == "domingo", "weekend", "weekday"))
-
+data_subs2 = mutate(data_subs, weektype = ifelse(weekdays(data_subs$date) == "sábado" | weekdays(data_subs$date) == "domingo", "weekend", "weekday"))
 data_subs2$weektype = as.factor(data_subs2$weektype)
 head(data_subs2)
 ```
@@ -165,4 +170,3 @@ p = ggplot(interval_subs, aes(x=interval, y=steps, color = weektype)) +
   facet_wrap(~weektype, ncol = 1, nrow=2)
 print(p)
 ```
-
